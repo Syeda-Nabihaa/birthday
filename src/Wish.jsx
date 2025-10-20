@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import Confetti from "react-confetti";
 import FlowersAnimation from "./Flower";
 import "./Flower.css";
+import Lottie from "lottie-react";
+import cakeAnimation from "./assets/b1.json";
 
 export default function WishPage() {
   const [showFlowers, setShowFlowers] = useState(false);
@@ -25,45 +27,55 @@ export default function WishPage() {
     };
   }, []);
 
-  return (
-    <div
-      className="relative min-h-screen flex flex-col  bg-gradient-to-br from-[#0f0f0f] via-[#1e293b] to-[#334155]
+return (
+  <div
+    className="relative min-h-screen overflow-hidden flex flex-col justify-center items-center 
+    bg-gradient-to-br from-[#0f0f0f] via-[#1e293b] to-[#334155] 
+  text-center p-6"
+  >
+    {/* 🎊 Confetti */}
+    {showConfetti && <Confetti recycle={false} numberOfPieces={400} />}
 
- overflow-hidden text-center p-6"
+    {/* 🌸 Flowers - Bottom Left */}
+    <motion.div
+      initial={{ opacity: 0, y: 100, scale: 0.8 }}
+      animate={
+        showFlowers
+          ? { opacity: 1, y: 0, scale: 1 }
+          : { opacity: 0, y: 100, scale: 0.8 }
+      }
+      transition={{ duration: 2, ease: "easeOut" }}
+      className="absolute bottom-0 left-0 z-0 w-1/3 max-w-[300px]"
     >
-      {/* 🎊 Confetti */}
-      {showConfetti && <Confetti recycle={false} numberOfPieces={400} />}
+      <FlowersAnimation />
+    </motion.div>
 
-      {/* 🌸 Flowers (Bouquet) */}
-      <motion.div
-        initial={{ opacity: 0, y: 100, scale: 0.8 }}
-        animate={
-          showFlowers
-            ? { opacity: 1, y: 0, scale: 1 }
-            : { opacity: 0, y: 100, scale: 0.8 }
-        }
-        transition={{
-          duration: 2,
-          ease: "easeOut",
-        }}
-        className="absolute bottom-0 z-0 "
-      >
-        <FlowersAnimation />
-      </motion.div>
+    {/* 🎂 Cake Animation - Bottom Right */}
+    <motion.div
+      initial={{ opacity: 0, scale: 0.8, y: 50 }}
+      animate={showCard ? { opacity: 1, scale: 1, y: 0 } : { opacity: 0 }}
+      transition={{ duration: 1.5, delay: 1 }}
+      className="absolute bottom-0 right-0 z-0 w-1/3 max-w-[300px] flex justify-end"
+    >
+      <Lottie
+        animationData={cakeAnimation}
+        loop={true}
+        className="w-full h-auto drop-shadow-[0_0_30px_rgba(236,72,153,0.5)]"
+      />
+    </motion.div>
 
-      {/* 💌 Birthday Card */}
-      <motion.div
-        className="relative z-10 flex flex-wrap justify-center gap-6"
-        initial={{ opacity: 0, y: 20 }}
-        animate={showCard ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-        transition={{ duration: 1.5, ease: "easeOut" }}
-      >
-        <BirthdayCard />
+    {/* 💌 Birthday Card */}
+    <motion.div
+      className="relative z-10 flex flex-col justify-center items-center text-center  mx-auto"
+      initial={{ opacity: 0, y: 20 }}
+      animate={showCard ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+      transition={{ duration: 1.5, ease: "easeOut" }}
+    >
+      <BirthdayCard />
+    </motion.div>
+  </div>
+);
 
-        {/* <p>Happy Birthdayyyyyyyyyyy</p> */}
-      </motion.div>
-    </div>
-  );
 }
 
 function BirthdayCard() {
